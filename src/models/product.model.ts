@@ -68,3 +68,31 @@ export async function deleteProduct(id: number): Promise<void> {
   await getProductById(id);
   await prisma.product.delete({ where: { id } });
 }
+
+export interface PaginatedResult {
+  data: SerializedProduct[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+export async function getPaginatedProducts(page: number, limit: number): Promise<PaginatedResult> {
+  const skip = (page - 1) * limit;
+  const [items, total] = await Promise.all([
+    prisma.product.findMany({ skip, take: limit, orderBy: { id: 'asc' } }),
+    prisma.product.count(),
+  ]);
+
+  return {
+    data: items.map(serialize),
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit) || 0,
+    },
+  };
+}

@@ -21,6 +21,14 @@ export async function createProductHandler(req: Request, res: Response, next: Ne
 
 export async function listProductsHandler(req: Request, res: Response, next: NextFunction) {
   try {
+    const { page, limit } = (res.locals.query ?? {}) as { page?: number; limit?: number };
+
+    if (page !== undefined || limit !== undefined) {
+      const result = await productModel.getPaginatedProducts(page ?? 1, limit ?? 10);
+      res.status(200).json(result);
+      return;
+    }
+
     const products = await productModel.getAllProducts();
     res.status(200).json(products);
   } catch (err) {

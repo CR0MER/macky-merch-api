@@ -13,3 +13,10 @@ export const updateProductSchema = createProductSchema.partial();
 
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
+
+export const paginationQuerySchema = z.object({
+  page: z.coerce.number().int().positive().optional(),
+  limit: z.coerce.number().int().positive().max(100).optional(),
+});
+
+export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
