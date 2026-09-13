@@ -38,7 +38,7 @@ export async function listProductsHandler(req: Request, res: Response, next: Nex
 
 export async function getProductHandler(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseId(req.params.id);
+    const id = parseId(String(req.params.id));
     const product = await productModel.getProductById(id);
     res.status(200).json(product);
   } catch (err) {
@@ -48,7 +48,7 @@ export async function getProductHandler(req: Request, res: Response, next: NextF
 
 export async function updateProductHandler(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseId(req.params.id);
+    const id = parseId(String(req.params.id));
     const product = await productModel.updateProduct(id, req.body);
     res.status(200).json(product);
   } catch (err) {
@@ -58,7 +58,7 @@ export async function updateProductHandler(req: Request, res: Response, next: Ne
 
 export async function deleteProductHandler(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseId(req.params.id);
+    const id = parseId(String(req.params.id));
     await productModel.deleteProduct(id);
     res.status(200).json({ message: 'Product deleted successfully.' });
   } catch (err) {

@@ -14,3 +14,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - '3100:3100'
+    environment:
+      PORT: 3100
+      DATABASE_URL: mysql://macky:mackypassword@db:3306/macky_merch_dev
+    depends_on:
+      db:
+        condition: service_healthy
