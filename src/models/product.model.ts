@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/prisma';
 import { NotFoundError } from '../errors/NotFoundError';
+import { AppError } from '../errors/AppError';
 
 export interface ProductInput {
   name: string;
@@ -38,8 +39,15 @@ function serialize(product: {
 }
 
 export async function createProduct(data: ProductInput): Promise<SerializedProduct> {
-  const product = await prisma.product.create({ data });
-  return serialize(product);
+  try {
+    const product = await prisma.product.create({ data });
+    return serialize(product);
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+      throw new AppError(400, 'sku must be unique');
+    }
+    throw err;
+  }
 }
 
 export async function getAllProducts(): Promise<SerializedProduct[]> {
@@ -60,8 +68,15 @@ export async function updateProduct(
   data: Partial<ProductInput>,
 ): Promise<SerializedProduct> {
   await getProductById(id);
-  const product = await prisma.product.update({ where: { id }, data });
-  return serialize(product);
+  try {
+    const product = await prisma.product.update({ where: { id }, data });
+    return serialize(product);
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+      throw new AppError(400, 'sku must be unique');
+    }
+    throw err;
+  }
 }
 
 export async function deleteProduct(id: number): Promise<void> {
