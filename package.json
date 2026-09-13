@@ -26,10 +26,10 @@
   "homepage": "https://github.com/CR0MER/macky-merch-api#readme",
   "description": "",
   "dependencies": {
-    "@prisma/client": "^7.10.0",
+    "@prisma/client": "^6.19.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "prisma": "^7.10.0",
+    "prisma": "^6.19.3",
     "zod": "^4.6.2"
   },
   "devDependencies": {

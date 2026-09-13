@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: macky_merch_dev
+      MYSQL_USER: macky
+      MYSQL_PASSWORD: mackypassword
+    ports:
+      - '3307:3306'
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-prootpassword']
+      interval: 5s
+      timeout: 5s
+      retries: 10
