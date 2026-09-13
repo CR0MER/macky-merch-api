@@ -6,7 +6,7 @@ export const createProductSchema = z.object({
   stock: z.number().int().nonnegative('stock must be a non-negative integer'),
   category: z.string().trim().min(1, 'category is required'),
   sku: z.string().trim().min(1, 'sku is required'),
-  description: z.string().trim().min(1).optional(),
+  description: z.string().trim().min(1).nullable().optional(),
 });
 
 export const updateProductSchema = createProductSchema.partial();

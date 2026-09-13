@@ -1,7 +1,7 @@
 {
   "name": "lscs-merchapi",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "directories": {
     "doc": "docs",
     "test": "tests"
@@ -11,20 +11,21 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CR0MER/macky-merch-api.git"
   },
-  "keywords": [],
+  "keywords": ["merch", "inventory", "rest-api", "express", "prisma", "mysql"],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/CR0MER/macky-merch-api/issues"
   },
   "homepage": "https://github.com/CR0MER/macky-merch-api#readme",
-  "description": "",
+  "description": "A RESTful inventory management API for LSCS's official merchandise, built with Node.js, Express, TypeScript, Prisma, and MySQL.",
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "dotenv": "^17.4.2",
