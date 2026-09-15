@@ -20,12 +20,19 @@ Macky Merch API is a RESTful backend of "Macky Merch" (The official LSCS merchan
 - npm
 - Docker Desktop (For the MySQL database)
 
+
 ### 1. Install Dependencies
 ```bash
 npm install
 ```
 
-### 2. Configure environment variables
+### 2. Generate the Prisma Client
+```bash
+npx prisma generate
+```
+`npm install` normally triggers this automatically via `@prisma/client`'s postinstall hook, but that hook doesn't run if you copy the project folder instead of installing fresh, or if your npm setup skips install scripts. Running it explicitly avoids a `@prisma/client did not initialize yet` crash later.
+
+### 3. Configure environment variables
 Copy the example env files:
 ```bash
 cp .env.example .env
@@ -33,7 +40,7 @@ cp .env.test.example .env.test
 ```
 These already point at the credentials and ports the `docker-compose.yml` `db` service uses — no edits needed for local development.
 
-### 3. Start the database
+### 4. Start the database
 ```bash
 docker compose up -d db
 ```
@@ -42,17 +49,17 @@ Wait for it to report healthy:
 docker compose ps
 ```
 
-### 4. Apply the schema
+### 5. Apply the schema
 ```bash
 npx prisma migrate deploy
 ```
 
-### 5. Seed sample data (optional)
+### 6. Seed sample data (optional)
 ```bash
 npm run seed
 ```
 
-### 6. Run the server
+### 7. Run the server
 ```bash
 npm run dev
 ```
@@ -61,8 +68,12 @@ API is now available at `http://localhost:3100`. You can confirm with:
 curl http://localhost:3100/health
 ```
 
-### 7. Run tests
-Tests run against an isolated `macky_merch_test` database (from `.env.test`), separate from your dev data:
+### 8. Run tests
+Tests run against an isolated `macky_merch_test` database (from `.env.test`), separate from your dev data. The `db` container only provisions `macky_merch_dev` by default, so the first time you test against a given database volume, create the test database and grant the `macky` user access to it:
+```bash
+docker compose exec db mysql -uroot -prootpassword -e "CREATE DATABASE IF NOT EXISTS macky_merch_test; GRANT ALL PRIVILEGES ON macky_merch_test.* TO 'macky'@'%'; FLUSH PRIVILEGES;"
+```
+Then run the tests:
 ```bash
 npm test
 ```
